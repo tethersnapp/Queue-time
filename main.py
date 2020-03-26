@@ -29,6 +29,9 @@ class LocalInfo(BoxLayout):
 
     def __init__(self, **kwargs):
         super(LocalInfo, self).__init__(**kwargs)
+        self.info = Label(text="tototot")
+        self.add_widget(self.info)
+        self.getPosition()
         with self.canvas:
             Color(.234, .456, .678, .8)  # set the colour
             self.rect = Rectangle(size =(100,100))
@@ -36,6 +39,7 @@ class LocalInfo(BoxLayout):
     def getPosition(self):
         g = geocoder.ip('me')
         self.lat, self.lng  = g.latlng
+        self.info.text = "lat:%.4f long:%.4f"%(self.lat, self.lng)
 
     def getLocalInfo(self,lat,lng,type="restaurant",radius=300,pagetoken=None):
         url = self.queryString.format(
