@@ -9,6 +9,7 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.clock import Clock
 from kivy.uix.button import Button
+from kivy.graphics import Rectangle, Color
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 
@@ -21,21 +22,24 @@ import ssl
 import geocoder
 
 
-class LocalInfo(Widget):
-    APIKEY = "AIzaSyBXYaJf79P51MqE6JXZjfZohBUnpuV1RyU"
+class LocalInfo(BoxLayout):
+    # lat,lng =
+    APIKEY = "AIzaSyABY9PJX_0ScAy6Sdtv3_bMa5qmOpL_ZBc"
     queryString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lng}&radius={radius}&type={type}&key={APIKEY}{pagetoken}"
-    USER_AGENT = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) "
-                                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                                "Chrome/54.0.2840.98 Safari/537.36"}
+
     def __init__(self, **kwargs):
         super(LocalInfo, self).__init__(**kwargs)
+        with self.canvas:
+            Color(.234, .456, .678, .8)  # set the colour
+            self.rect = Rectangle(size =(100,100))
 
     def getPosition(self):
-        pass
+        g = geocoder.ip('me')
+        self.lat, self.lng  = g.latlng
 
     def getLocalInfo(self,lat,lng,type="restaurant",radius=300,pagetoken=None):
         url = self.queryString.format(
-                        lat = lat,lng = lng, radius = radius, type = type,APIKEY = self.APIKEY, pagetoken = "&pagetoken="+pagetoken if pagetoken else "")
+                        lat=self.lat,lng=self.lng,radius=radius,type=type,APIKEY=self.APIKEY,pagetoken="&pagetoken="+pagetoken if pagetoken else "")
         response = requests.get(url)
         res = json.loads(response.text)
         for result in res["results"]:
@@ -62,9 +66,6 @@ class Main(App):
     def keypress(self,frame, keyboard, keycode, key, modifiers):
         pass
 
-# g = geocoder.ip('me')
-# lat, lng    = g.latlng
-# LI = LocalInfo()
-# LI.getLocalInfo(lat,lng)
+
 
 Main().run()
