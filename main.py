@@ -66,8 +66,9 @@ class LocalInfo(BoxLayout):
         res = json.loads(response.text)
         self.localPlaces = res["results"]
 
-    def getStaticMapAround(self,zoom=14):
-        url = self.mapboxQs.format(style="streets-v10",lat=self.lat,lon=self.long,zoom=zoom,w=400,h=400,retina="",token=self.mapboxKEY,attribution="true")
+    def getStaticMapAround(self,zoom=14,style="dark-v10"):
+        url = self.mapboxQs.format(style=style,lat=self.lat,lon=self.long,zoom=zoom,w=400,h=400,retina="",token=self.mapboxKEY,attribution="true")
+        url += "&{name}-{label}+{color}({lon},{lat})".format(name="pin-s",label="1",color="#FFF",lon=self.long,lat=self.lat)
         with urllib.request.urlopen(url) as response:
             data = io.BytesIO(response.read())
             data.seek(0)
