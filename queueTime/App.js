@@ -1,15 +1,17 @@
-import React from 'react';
+import React,{useState} from 'react';
 import MapView,{PROVIDER_GOOGLE,Marker}  from 'react-native-maps';
 import {Platform,StyleSheet,Text,View,Alert,TouchableOpacity,Dimensions} from "react-native";
 
 const mapstyle = require('./mapstyle.json');
+
+
 export default class App extends React.Component {
   _isMounted = false;
   selfMarker = null;
   state = {
     pos: {lat:null,long:null,alt:null},
     initialRegion: {latitude: 37.78825,longitude: -122.4324, latitudeDelta: 0.01, longitudeDelta: 0.01},
-    nearby: null
+    nearby: []
   };
 
   constructor(props){
@@ -28,7 +30,7 @@ export default class App extends React.Component {
   }
 
   getMarkers(){
-    let APIKEY  = "ENTER API KEY HERE!!!"
+    let APIKEY  = "API KEY HERE";
     let radius  = 200;
     let lat   = this.state.pos.lat;
     let long  = this.state.pos.long;
@@ -49,7 +51,9 @@ export default class App extends React.Component {
             console.log(dataArray[j]["name"]);
             console.log(res[j]);
           }
-          this.setState({nearby:dataArray});
+          console.log("FOUND")
+          console.log(res)
+          this.setState({nearby:res});
           console.log("updating canvas");})
   }
 
@@ -80,6 +84,7 @@ export default class App extends React.Component {
           customMapStyle={mapstyle}
           style={styles.mapStyle}>
           {this.selfMarker}
+          {this.state.nearby.join()}
         </MapView>);
     }else{
       return (<Text>MAP HAS NOT YET FOUND YOUR LOCATION</Text>);
