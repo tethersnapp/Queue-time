@@ -30,7 +30,7 @@ export default class App extends React.Component {
   }
 
   getMarkers(){
-    let APIKEY  = "API KEY HERE";
+    let APIKEY  = "API KEY";
     let radius  = 200;
     let lat   = this.state.pos.lat;
     let long  = this.state.pos.long;
@@ -53,7 +53,7 @@ export default class App extends React.Component {
           }
           console.log("FOUND")
           console.log(res)
-          this.setState({nearby:res});
+          this._isMounted && this.setState({nearby:res});
           console.log("updating canvas");})
   }
 
@@ -66,7 +66,7 @@ export default class App extends React.Component {
         var initialRegion = this.state.initialRegion;
         initialRegion.latitude = pos.lat
         initialRegion.longitude = pos.long
-        this.setState({pos:pos,initialRegion:initialRegion});
+        this._isMounted && this.setState({pos:pos,initialRegion:initialRegion});
         this.selfMarker = <Marker coordinate={{latitude:pos.lat,longitude:pos.long}}/>;
         const res = this.getMarkers();
       },
