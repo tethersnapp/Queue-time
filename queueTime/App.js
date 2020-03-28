@@ -4,6 +4,7 @@ import {Platform,StyleSheet,Text,View,Alert,TouchableOpacity,Dimensions} from "r
 
 const mapstyle = require('./mapstyle.json');
 export default class App extends React.Component {
+  _isMounted = false;
   selfMarker = null;
   state = {
     pos: {lat:null,long:null,alt:null},
@@ -16,12 +17,18 @@ export default class App extends React.Component {
   }
 
   componentDidMount(){
+    this._isMounted = true;
     console.log("*MOUNTED");
     this.findCoordinates();
   }
 
-  async getMarkers(){
-    let APIKEY  = "____ **** SET GOOGLE PLACES API KEY HERE **** ____";
+  componentWillUnmount(){
+    this._isMounted = false;
+    console.log("*UN-MOUNT");
+  }
+
+  getMarkers(){
+    let APIKEY  = "ENTER API KEY HERE!!!"
     let radius  = 200;
     let lat   = this.state.pos.lat;
     let long  = this.state.pos.long;
@@ -42,8 +49,7 @@ export default class App extends React.Component {
             console.log(dataArray[j]["name"]);
             console.log(res[j]);
           }
-          this.setState({nearby:res});
-          this.forceUpdate();
+          this.setState({nearby:dataArray});
           console.log("updating canvas");})
   }
 
@@ -59,7 +65,6 @@ export default class App extends React.Component {
         this.setState({pos:pos,initialRegion:initialRegion});
         this.selfMarker = <Marker coordinate={{latitude:pos.lat,longitude:pos.long}}/>;
         const res = this.getMarkers();
-        this.forceUpdate();
       },
       error => Alert.alert(error.message),
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
@@ -75,7 +80,6 @@ export default class App extends React.Component {
           customMapStyle={mapstyle}
           style={styles.mapStyle}>
           {this.selfMarker}
-          {this.status.nearby!=null && this.status.nearby}
         </MapView>);
     }else{
       return (<Text>MAP HAS NOT YET FOUND YOUR LOCATION</Text>);
