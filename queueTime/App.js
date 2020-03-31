@@ -30,8 +30,8 @@ export default class App extends React.Component {
   }
 
   getMarkers(){
-    let APIKEY  = "API KEY";
-    let radius  = 200;
+    let APIKEY  = PLACE API KEY HERE;
+    let radius  = 500;
     let lat   = this.state.pos.lat;
     let long  = this.state.pos.long;
     let type  = "restaurant";
@@ -44,7 +44,12 @@ export default class App extends React.Component {
         .then((resjson) => {console.log(JSON.stringify(resjson)); return resjson["results"];})
         .then((dataArray) => {
           var res = dataArray.map((marker, index) => (
-              <Marker coordinate = {{latitude: marker["geometry"]["location"]["lat"],longitude: marker["geometry"]["location"]["lng"]}} title = { "FAFA" } />
+              <Marker
+                key = {index}
+                coordinate = {{latitude: marker["geometry"]["location"]["lat"],longitude: marker["geometry"]["location"]["lng"]}}
+                title = { marker["name"] }>
+                <View style={{width: 8, height: 8, borderRadius: 8, backgroundColor: "rgba(0,255,0, 0.9)"}} />
+              </Marker>
             ));
           console.log("going through");
           for(var j=0;j<dataArray.length;j++){
@@ -55,6 +60,7 @@ export default class App extends React.Component {
           console.log(res)
           this._isMounted && this.setState({nearby:res});
           console.log("updating canvas");})
+          console.log("done");
   }
 
   findCoordinates = () => {
@@ -84,7 +90,7 @@ export default class App extends React.Component {
           customMapStyle={mapstyle}
           style={styles.mapStyle}>
           {this.selfMarker}
-          {this.state.nearby.join()}
+          {this.state.nearby}
         </MapView>);
     }else{
       return (<Text>MAP HAS NOT YET FOUND YOUR LOCATION</Text>);
