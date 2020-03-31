@@ -30,7 +30,7 @@ export default class App extends React.Component {
   }
 
   getMarkers(){
-    let APIKEY  = "AIzaSyBXYaJf79P51MqE6JXZjfZohBUnpuV1RyU";
+    let APIKEY  = "";
     let radius  = 500;
     let lat   = this.state.pos.lat;
     let long  = this.state.pos.long;
