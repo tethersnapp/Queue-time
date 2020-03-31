@@ -30,11 +30,11 @@ export default class App extends React.Component {
   }
 
   getMarkers(){
-    let APIKEY  = PLACE API KEY HERE;
+    let APIKEY  = "AIzaSyBXYaJf79P51MqE6JXZjfZohBUnpuV1RyU";
     let radius  = 500;
     let lat   = this.state.pos.lat;
     let long  = this.state.pos.long;
-    let type  = "restaurant";
+    let type  = "grocery_or_supermarket";
 
     let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&radius=${radius}&type=${type}&key=${APIKEY}`;
     console.log("TRYING: "+url)
@@ -45,10 +45,10 @@ export default class App extends React.Component {
         .then((dataArray) => {
           var res = dataArray.map((marker, index) => (
               <Marker
-                key = {index}
-                coordinate = {{latitude: marker["geometry"]["location"]["lat"],longitude: marker["geometry"]["location"]["lng"]}}
-                title = { marker["name"] }>
-                <View style={{width: 8, height: 8, borderRadius: 8, backgroundColor: "rgba(0,255,0, 0.9)"}} />
+                  key={index}
+                  coordinate={{latitude: marker["geometry"]["location"]["lat"],longitude: marker["geometry"]["location"]["lng"]}}
+                  title={marker["name"]}>
+                <View style={styles.circle} />
               </Marker>
             ));
           console.log("going through");
@@ -125,4 +125,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height-100,
   },
+  circle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "rgba( 73, 166, 149, 0.5)"}
 });
